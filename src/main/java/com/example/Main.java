@@ -6,11 +6,14 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 12345)) {
+        try (Socket socket = new Socket("10.22.9.14", 3000)) 
+        {
+            System.out.println("Connesso al server");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeBytes("s" + "\n");
             String rispostaServer = in.readLine();
+
             if ("l?".equals(rispostaServer)) {
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("Hai già un account?: ");
@@ -97,9 +100,9 @@ public class Main {
             if (messaggio.equalsIgnoreCase("UserList")) {
                 out.writeBytes("UserList" + "\n");
             } else if (messaggio.startsWith("@")) {
-                out.writeBytes(messaggio);
+                out.writeBytes(messaggio + "\n");
             } else {
-                out.writeBytes("--GLOBAL" + messaggio);
+                out.writeBytes("--GLOBAL" + messaggio + "\n");
             }
         }
     }
