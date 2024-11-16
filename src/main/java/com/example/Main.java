@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         //10.22.9.14
-        try (Socket socket = new Socket("172.20.10.9", 3000)) {
+        try (Socket socket = new Socket("192.168.1.150", 3000)) {
             System.out.println("Connesso al server");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -26,7 +26,10 @@ public class Main {
                 out.writeBytes("si?" + "\n");
                 login(scanner, socket, in, out);
 
-                ReaderThread readerThread = new ReaderThread(in);
+                
+                
+                ReaderThread readerThread = new ReaderThread(in, out, scanner);
+                
                 readerThread.start();
                 
             }
@@ -93,21 +96,4 @@ public class Main {
 
         
     }
-   /* 
-    private static void chat(Scanner scanner, Socket socket, BufferedReader in, DataOutputStream out) throws IOException {
-
-        ReaderThread readerThread = new ReaderThread(in);
-        ReaderThread.start();
-
-        while (true) {
-            String messaggio = scanner.nextLine();
-            if (messaggio.equalsIgnoreCase("UserList")) {
-                out.writeBytes("UL?" + "\n");
-            } else if (messaggio.startsWith("@")) {
-                out.writeBytes(messaggio + "\n");
-            } else {
-                out.writeBytes("--GLOBAL" + messaggio + "\n");
-            }
-        } 
-    }*/
 }
