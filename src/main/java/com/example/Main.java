@@ -6,7 +6,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("10.22.9.14", 3000)) {
+        //10.22.9.14
+        try (Socket socket = new Socket("172.20.10.9", 3000)) {
             System.out.println("Connesso al server");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -25,7 +26,9 @@ public class Main {
                 out.writeBytes("si?" + "\n");
                 login(scanner, socket, in, out);
 
-                chat(scanner, socket, in, out);
+                ReaderThread readerThread = new ReaderThread(in);
+                readerThread.start();
+                
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,7 +74,7 @@ public class Main {
                 System.out.println("Inserisci la password: ");
 
                 String password = scanner.nextLine();
-
+                                    
                 out.writeBytes(username + "\n");
                 out.writeBytes(password + "\n");
             
@@ -90,23 +93,11 @@ public class Main {
 
         
     }
-
+   /* 
     private static void chat(Scanner scanner, Socket socket, BufferedReader in, DataOutputStream out) throws IOException {
 
-        Thread readerThread = new Thread(() -> {
-            try {
-                while (true) {
-                    String messaggio = in.readLine();
-                    if (messaggio.equalsIgnoreCase("UL")) {
-                        System.out.println("lista username: ");
-                    }
-                    System.out.println(messaggio);
-                }
-            } catch (IOException e) {
-                System.out.println("Connessione chiusa");
-            }
-        });
-        readerThread.start();
+        ReaderThread readerThread = new ReaderThread(in);
+        ReaderThread.start();
 
         while (true) {
             String messaggio = scanner.nextLine();
@@ -117,6 +108,6 @@ public class Main {
             } else {
                 out.writeBytes("--GLOBAL" + messaggio + "\n");
             }
-        }
-    }
+        } 
+    }*/
 }
