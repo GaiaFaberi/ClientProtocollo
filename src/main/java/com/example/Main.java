@@ -12,6 +12,7 @@ public class Main {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             boolean continua = true;
+            String usernameInUso = "";
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("Hai già un account?: ");
 
@@ -26,7 +27,7 @@ public class Main {
                             
                         case "si":
                             out.writeBytes("si?" + "\n");
-                            login(scanner, socket, in, out);  
+                            usernameInUso = login(scanner, socket, in, out, usernameInUso);  
                             continua = false;
                             break;
                         
@@ -54,11 +55,11 @@ public class Main {
                     switch (comando) {
                         case "1":
                             out.writeBytes("UserList" + "\n");
-                        
                             break;
                         
                         case "2":
                             out.writeBytes("@" + "\n");
+                            out.writeBytes(scanner.nextLine() + "\n");
                             break;
                         
                         case "3":
@@ -67,6 +68,9 @@ public class Main {
                         
                         case "4":
                             out.writeBytes("exit" + "\n");
+                            out.writeBytes(usernameInUso + "\n");
+                            continua = false;
+                            socket.close();
                             break;
                     
                         default:
@@ -75,6 +79,7 @@ public class Main {
                     }
                     
                 }
+                
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +112,7 @@ public class Main {
         }    
     }
 
-    private static void login(Scanner scanner, Socket socket, BufferedReader in, DataOutputStream out) throws IOException {
+    private static String login(Scanner scanner, Socket socket, BufferedReader in, DataOutputStream out, String usernameInUso) throws IOException {
 
         boolean continua = true;
         if(in.readLine().equals("siC?")){
@@ -116,6 +121,8 @@ public class Main {
                 String username = scanner.nextLine();
                 System.out.println("Inserisci la password: ");
                 String password = scanner.nextLine();
+                
+                usernameInUso = username;
 
                 out.writeBytes(username + "\n");
                 out.writeBytes(password + "\n");
@@ -127,7 +134,7 @@ public class Main {
                     System.out.println("Accesso effettuato");
                     continua = false;
                 }
-            }       
-        }   
+            }   
+        }  return usernameInUso; 
     }
 }

@@ -1,6 +1,7 @@
 package com.example;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 
 
@@ -19,9 +20,13 @@ public class ReaderThread extends Thread {
                 switch (in.readLine()) {
                     case "UL":
                         System.out.println(in.readLine());
-                        continua = false;
                         break;
-                
+                    
+                    case "PRIV":
+                        String user = 
+                        System.out.println(in.readLine());
+                        break;
+
                     default:
                         break;
                 }
