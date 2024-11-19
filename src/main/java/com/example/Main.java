@@ -5,34 +5,77 @@ import java.net.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        //10.22.9.14
-        try (Socket socket = new Socket("192.168.1.150", 3000)) {
+    public static void main(String[] args) throws InterruptedException {
+        //
+        try (Socket socket = new Socket("10.22.9.14", 3000)) {
             System.out.println("Connesso al server");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            out.writeBytes("s" + "\n");
-            String rispostaServer = in.readLine();
-
-            if (rispostaServer.equals("l?")) {
+            boolean continua = true;
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("Hai già un account?: ");
+
                 String scelta = scanner.nextLine();
 
-                if (scelta.equalsIgnoreCase("no")) {
-                    out.writeBytes("su?" + "\n");
-                    register(scanner, socket, in, out);
+                while(continua){
+                    switch(scelta){
+
+                        case "no":
+                            out.writeBytes("su?" + "\n");
+                            register(scanner, socket, in, out);
+                            
+                        case "si":
+                            out.writeBytes("si?" + "\n");
+                            login(scanner, socket, in, out);  
+                            continua = false;
+                            break;
+                        
+                        default:
+                            System.out.println("scelta non disponibile");
+                    }
                 }
-                out.writeBytes("si?" + "\n");
-                login(scanner, socket, in, out);
+
+                ReaderThread readerThread = new ReaderThread(in);
+                
+                String comando;
+                System.out.println("Operazioni possibili:");
+                System.out.println("1. lista utenti");
+                System.out.println("2. chat privata");
+                System.out.println("3. chat globale");
+                System.out.println("4. uscire dalla chat");
 
                 
                 
-                ReaderThread readerThread = new ReaderThread(in, out, scanner);
                 
+                continua = true;
                 readerThread.start();
-                
-            }
+                while(continua){
+                    comando = scanner.nextLine();
+                    switch (comando) {
+                        case "1":
+                            out.writeBytes("UserList" + "\n");
+                        
+                            break;
+                        
+                        case "2":
+                            out.writeBytes("@" + "\n");
+                            break;
+                        
+                        case "3":
+                            out.writeBytes("GLOBAL" + "\n");
+                            break;
+                        
+                        case "4":
+                            out.writeBytes("exit" + "\n");
+                            break;
+                    
+                        default:
+                            System.out.println("opzione non valida");
+                            break;
+                    }
+                    
+                }
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,6 +95,7 @@ public class Main {
 
                 out.writeBytes(username + "\n");
                 out.writeBytes(password + "\n");
+
                 String risposta = in.readLine();
                 if ("su!".equals(risposta)) {
                     System.out.println("Errore: username già in uso.");
@@ -59,12 +103,8 @@ public class Main {
                     System.out.println("Registrazione avvenuta con successo.");
                     continua = false;
                 }
-            }
-            
-
-        }
-
-        
+            }   
+        }    
     }
 
     private static void login(Scanner scanner, Socket socket, BufferedReader in, DataOutputStream out) throws IOException {
@@ -75,12 +115,11 @@ public class Main {
                 System.out.println("Inserici l'username: ");
                 String username = scanner.nextLine();
                 System.out.println("Inserisci la password: ");
-
                 String password = scanner.nextLine();
-                                    
+
                 out.writeBytes(username + "\n");
                 out.writeBytes(password + "\n");
-            
+
                 String risposta = in.readLine();
                 if ("si!".equals(risposta)) {
                     System.out.println("Credenziali errate. Riprova: ");
@@ -88,12 +127,7 @@ public class Main {
                     System.out.println("Accesso effettuato");
                     continua = false;
                 }
-
-            }
-            
-            
-        }
-
-        
+            }       
+        }   
     }
 }
