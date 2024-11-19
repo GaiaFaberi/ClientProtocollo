@@ -23,7 +23,7 @@ public class ReaderThread extends Thread {
                         break;
                     
                     case "PRIV":
-                        String user = 
+                        
                         System.out.println(in.readLine());
                         break;
 
