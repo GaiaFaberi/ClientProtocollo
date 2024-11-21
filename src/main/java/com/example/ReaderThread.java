@@ -8,14 +8,15 @@ import java.io.IOException;
 public class ReaderThread extends Thread {
    private BufferedReader in;
 
-
     public ReaderThread(BufferedReader in) {
         this.in = in;
     }
 
     public void run() {
         try {
+
             boolean continua = true;
+            
             do{
                 switch (in.readLine()) {
                     case "UL":
