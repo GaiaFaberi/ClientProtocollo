@@ -17,7 +17,7 @@ public class Main {
             String usernameInUso = "";
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("Hai già un account?: ");
+            System.out.println("Hai già un account? (si/no): ");
 
             String scelta = scanner.nextLine();
 
