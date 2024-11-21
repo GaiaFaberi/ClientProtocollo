@@ -23,7 +23,14 @@ public class ReaderThread extends Thread {
                         break;
                     
                     case "PRIV":
-                        
+                        System.out.println(in.readLine());
+                        break;
+                    
+                    case "!":
+                        System.out.println("Impossibile inviare messaggi a se stessi");
+                        break;
+                    
+                    case "GB":
                         System.out.println(in.readLine());
                         break;
 

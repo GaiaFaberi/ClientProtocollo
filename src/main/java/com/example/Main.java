@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        //
-        try (Socket socket = new Socket("10.22.9.14", 3000)) {
+        //10.22.9.14
+        try (Socket socket = new Socket("192.168.1.149", 3000)) {
             System.out.println("Connesso al server");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -59,11 +59,14 @@ public class Main {
                         
                         case "2":
                             out.writeBytes("@" + "\n");
+                            out.writeBytes(usernameInUso + "\n");
                             out.writeBytes(scanner.nextLine() + "\n");
                             break;
                         
                         case "3":
                             out.writeBytes("GLOBAL" + "\n");
+                            out.writeBytes(usernameInUso + "\n");
+                            out.writeBytes(scanner.nextLine() + "\n");
                             break;
                         
                         case "4":
@@ -72,7 +75,7 @@ public class Main {
                             continua = false;
                             socket.close();
                             break;
-                    
+
                         default:
                             System.out.println("opzione non valida");
                             break;
