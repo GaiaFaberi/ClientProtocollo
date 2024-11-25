@@ -16,25 +16,34 @@ public class ReaderThread extends Thread {
         try {
 
             boolean continua = true;
-            
+            String userSender = "";
+            String text = "";
             do{
                 switch (in.readLine()) {
                     case "UL":
                         System.out.println(in.readLine());
                         break;
                     
-                    case "PRIV":
-                        System.out.println(in.readLine());
+                    case "PRIVATE":
+                        userSender = in.readLine();
+                        text = in.readLine();
+                        System.out.println("(privato)" + userSender + ": " + text);
                         break;
                     
                     case "!":
-                        System.out.println("Impossibile inviare messaggi a se stessi");
+                        System.out.println("Si e' verificato un problema.");
                         break;
                     
                     case "GB":
-                        System.out.println(in.readLine());
+                        userSender = in.readLine();
+                        text = in.readLine();
+                        System.out.println("(globale)" + userSender + ": " + text);
                         break;
 
+                        case "JL":
+                        userSender = in.readLine();
+                        text = in.readLine();
+                        System.out.println(userSender + text);
                     default:
                         break;
                 }
